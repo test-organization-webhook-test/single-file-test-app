@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Calc</title>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0; min-height: 100vh; display: grid; place-items: center;
+        font-family: system-ui, sans-serif;
+        background: linear-gradient(135deg, #1e293b, #0f172a); color: #e2e8f0;
+      }
+      .card {
+        background: #1e293b; padding: 2.5rem; border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0,0,0,.4); width: min(90vw, 380px); text-align: center;
+      }
+      h1 { margin: 0 0 1.5rem; }
+      input, button { padding: .75rem 1rem; border-radius: 8px; font-size: 1rem; width: 100%; }
+      input { border: 1px solid #334155; background: #0f172a; color: #e2e8f0; margin-bottom: .75rem; }
+      button { border: none; background: #38bdf8; color: #0f172a; font-weight: 600; cursor: pointer; }
+      button:hover { background: #0ea5e9; }
+      pre {
+        margin-top: 1.25rem; padding: .75rem; border-radius: 8px; background: #0f172a;
+        color: #38bdf8; text-align: left; white-space: pre-wrap; word-break: break-all; min-height: 1.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <h1>Calculator</h1>
+      <input id="expr" placeholder="e.g. 2 + 2" autofocus />
+      <button id="go">Evaluate</button>
+      <pre id="out"></pre>
+    </main>
+    <script>
+      const out = document.getElementById("out");
+      document.getElementById("go").addEventListener("click", async () => {
+        const expr = document.getElementById("expr").value;
+        const res = await fetch("/run", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({ expr }),
+        });
+        out.textContent = await res.text();
+      });
+    </script>
+  </body>
+</html>
